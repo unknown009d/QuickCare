@@ -94,8 +94,8 @@ chmod +x run-dev.sh
 
 | Service  | Default                                        |
 | -------- | ---------------------------------------------- |
-| Backend  | `http://localhost:5000` *(or configured port)* |
-| Frontend | `http://localhost:5500`                        |
+| Backend  | `http://127.0.0.1:5000` *(or configured port)* |
+| Frontend | `http://127.0.0.1:5500`                        |
 
 > ⚠️ Do **not** change the frontend port frequently —
 > this can break **PWA service worker scope & caching**.
