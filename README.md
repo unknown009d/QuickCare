@@ -1,5 +1,8 @@
 # Quick Care
+
 ![Loading](quickcareslowlow.gif)
+
+Visit the web app in : [Live Preview](https://druba.in/QuickCare/frontend)
 
 This project uses a **two-tier architecture**:
 
