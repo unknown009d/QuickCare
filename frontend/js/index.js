@@ -115,7 +115,7 @@ async function dataRetrive(imageFile) {
 }
 
 async function processImage(userId, imageFile) {
-  const url = "http://192.168.1.6:5000";
+  const url = "http://127.0.0.1:5000";
 
   // Step -1: Check if server is running
   try {

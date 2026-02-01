@@ -28,7 +28,6 @@ project-root/
 ├── frontend/
 │   ├── css/
 │   ├── js/
-│   │   └── index.js
 │   ├── images/
 │   └── data/
 │
@@ -110,22 +109,16 @@ Once the **backend server is running**, you **must update the frontend API URL**
 ### 📍 File to edit
 
 ```
-frontend/js/index.js
-```
-
-### 📍 Location
-
-```
-Line ~118
+frontend/js/index.js in Line ~118
 ```
 
 ### 🔧 Change this variable:
 
 ```js
-const url = "http://localhost:5000";
+const url = "http://127.0.0.1:5000";
 ```
 
-> Replace the port if your backend runs on a different one.
+> Replace the ip address with your machine's ip address. Make sure to change the ip address whenever you connect to a different network. If you want to use it as a standalone one keep it at 127.0.0.1
 
 This is required because:
 
