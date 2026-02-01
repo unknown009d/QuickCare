@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hemoglobin Estimation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+      }
+      #response {
+        margin-top: 20px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+      #user-images {
+        margin-top: 40px;
+      }
+      #user-images h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+      #images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      #images img {
+        height: 100px;
+        width: 100px;
+        object-fit: contain;
+        background-color: #f2f2f210;
+        border: 1pt solid #242424;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #121212;
+          color: #f2f2f2;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <input
+      type="file"
+      id="imageInput"
+      name="image"
+      accept="image/*"
+      onchange="processImage()"
+      required
+    />
+
+    <div id="response"></div>
+
+    <div id="user-images">
+      <div id="images"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          await processImage();
+        });
+
+      async function processImage() {
+        const userId = "user-001";
+        const imageInput = document.getElementById("imageInput").files[0];
+        const responseDiv = document.getElementById("response");
+        const imagesDiv = document.getElementById("images");
+        imagesDiv.innerHTML = "";
+
+        if (!imageInput) {
+          alert("Please select an image file.");
+          return;
+        }
+
+        try {
+          // Step 1: Upload
+          const formData = new FormData();
+          formData.append("image", imageInput);
+          formData.append("user-id", userId);
+
+          responseDiv.textContent = "📤 Uploading image...";
+          let res = await fetch("/upload", { method: "POST", body: formData });
+          let result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Upload failed");
+
+          // Step 2: Detect
+          responseDiv.textContent += "\n👁️ Detecting eye region...";
+          res = await fetch("/detect", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "user-id": userId }),
+          });
+          result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Eye detection failed");
+
+          // Step 3: Crop
+          responseDiv.textContent += "\n✂️ Cropping conjunctiva...";
+          res = await fetch("/crop", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "user-id": userId }),
+          });
+          result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Cropping failed");
+
+          // Step 4: Calculate
+          responseDiv.textContent += "\n🧮 Almost done, please wait...";
+          res = await fetch("/calculate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "user-id": userId }),
+          });
+          result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Calculation failed");
+
+          responseDiv.innerHTML = `✅ Detection complete!<br><h2><strong>Hemoglobin: ${result.hemo} g/dL</strong></h2>`;
+
+          // Step 5: Fetch user images (NEW SECTION)
+          const imgRes = await fetch("/get_images", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "user-id": userId }),
+          });
+
+          const imgData = await imgRes.json();
+          if (!imgRes.ok)
+            throw new Error(imgData.error || "Could not load images");
+
+          // Display all images in the new section
+          imagesDiv.innerHTML = "";
+          imgData.images.forEach((url) => {
+            const img = document.createElement("img");
+            img.src = `${url}?t=${Date.now()}`;
+            img.alt = "User processed image";
+            imagesDiv.appendChild(img);
+          });
+        } catch (error) {
+          console.error(error);
+          responseDiv.textContent = `❌ Error: ${error.message}`;
+        }
+      }
+    </script>
+  </body>
+</html>

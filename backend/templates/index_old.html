@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Upload an Image</h1>
+    <form id="uploadForm">
+        <input type="file" id="imageInput" name="image" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent the form from submitting normally
+
+            const imageInput = document.getElementById('imageInput').files[0];
+            
+            if (!imageInput) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // Create a FormData object to hold the image file
+            const formData = new FormData();
+            formData.append('image', imageInput);
+            formData.append('user-id', "user-001");
+
+            try {
+                const response = await fetch('/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                // Display the response
+                document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response').textContent = 'An error occurred during upload.';
+            }
+        });
+    </script>
+</body>
+</html>

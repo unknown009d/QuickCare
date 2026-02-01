@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@layer base {
+  html {
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .fileupload {
+    @apply bg-blue-100 dark:bg-blue-900/20 grid place-items-center;
+  }
+}
+
+.slide {
+  @apply h-1.5 w-10 bg-slide rounded-full transition-colors duration-500;
+}
+
+.active {
+  @apply bg-primary;
+}
+
+.checkboard {
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    ),
+    linear-gradient(
+      45deg,
+      var(--checker-color) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--checker-color) 75%,
+      var(--checker-color)
+    );
+  background-position: 0 0, 10px 10px;
+  background-repeat: repeat;
+}
+
+.list-items {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.list-items.runni {
+  animation: showonebyone 400ms ease-in-out forwards;
+}
+.list-items.runni:nth-child(1) {
+  animation-delay: 1ms;
+}
+.list-items.runni:nth-child(2) {
+  animation-delay: 1000ms;
+}
+.list-items.runni:nth-child(3) {
+  animation-delay: 2000ms;
+}
+.list-items.runni:nth-child(4) {
+  animation-delay: 3000ms;
+}
+.list-items.runni:nth-child(5) {
+  animation-delay: 4000ms;
+}
+
+@keyframes showonebyone {
+  to {
+    opacity: 1;
+  }
+}
