@@ -214,7 +214,7 @@ document
       } else {
         alert("Processing failed. " + error.message);
       }
-      //location.reload();
+      location.reload();
       return;
     }
 
