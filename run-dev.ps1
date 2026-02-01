@@ -8,7 +8,7 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", {
     # Create venv if missing
     if (-Not (Test-Path "venv")) {
         Write-Host "Creating virtual environment..." -ForegroundColor Cyan
-        python -m venv venv
+        py -3.13 -m venv venv
     }
 
     # Activate venv

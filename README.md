@@ -42,7 +42,7 @@ project-root/
 
 Make sure the following are installed:
 
-* **Python 3.10+**
+* **Python 3.13+**
 * **Node.js (with npm)**
 * **PowerShell** (Windows) or **Bash** (Linux/macOS)
 
